@@ -1,24 +1,24 @@
-let express = require('express');
-let socket = require('socket.io');
+const express = require('express');
+const socket = require('socket.io');
 
-let app = express();
-let server = app.listen(3000);
+const app = express();
+const server = app.listen(3000);
 
 app.use(express.static('public'));
 
-let io = socket(server);
+const io = socket(server);
 
 console.log('server running');
 
 io.sockets.on('connection', newConnection);
 
-function newConnection(socket){
-console.log('new connection: ' + socket.id)
+function newConnection(socketClient){
+console.log('new connection: ' + socketClient.id)
 
-socket.on('mouse', mouseMessage);
+socketClient.on('mouse', mouseMessage);
 function mouseMessage(data){
-    socket.broadcast.emit('mouse', data);
-    // io.sockets.emit('mouse',data);
+    socketClient.broadcast.emit('mouse', data);
+    // io.socketClient.emit('mouse',data);
     //console.log(data);
 }
 

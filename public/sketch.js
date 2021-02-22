@@ -15,15 +15,15 @@ class player{
 }
 
 
-let socket;
+const socketClient;
 
 let p1;
 let p2;
 
 function setup() {
   createCanvas(400, 400);
-  socket = io.connect('http://localhost:3000');
-  socket.on('mouse', newUpdate);
+  socketClient = io.connect('http://localhost:3000');
+  socketClient.on('mouse', newUpdate);
   p1 = new player(100,100);
   p2 = new player(300,300);
 }
@@ -41,7 +41,7 @@ function mouseDragged(){
     y: mouseY
   }
 
-  socket.emit('mouse', data);
+  socketClient.emit('mouse', data);
   //noStroke();
   //ellipse(mouseX,mouseY, 30);
   p1.update(mouseX,mouseY);
