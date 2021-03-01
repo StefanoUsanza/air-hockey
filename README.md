@@ -5,7 +5,7 @@ Air hockey multiplayer tramite l'utilizzo di web socket(socket.io),
 - server express
 
 Gli utenti potranno giocare contro un altra persona impostando lo stesso numero di stanza generato da uno degli utenti. 
-L'obbiettivo del gioco è realizzare il maggior numero di punti prima che scada il tempo; per fare punti il giocatore deve fare entrare il disco nella porta avversaria.
+L'obbiettivo del gioco è realizzare il maggior numero di punti prima che scada il tempo; per fare punti il giocatore deve fare entrare il disco nella porta avversaria. Il giocatore controllerà i movimenti direttamente tramite il mouse.
 
 ## obbiettivi progetto
 
