@@ -21,5 +21,8 @@ function mouseMessage(data){
     // io.socketClient.emit('mouse',data);
     //console.log(data);
 }
+socketClient.on('disco', (data)=>{
+    socketClient.broadcast.emit('disco', data);
+});
 
 }

@@ -9,5 +9,17 @@ class disc{
           ellipse(pos.x,pos.y,20)
         }
 
+        aggiorna(){
+          let data = {
+            x: this.body.position.x,
+            y: this.body.position.y
+          }
+          socketClient.emit('disco', data);
+        }
+
+        d2(data){
+          Matter.Body.setPosition(this.body, {x: data.x, y: data.y});
+        }
+
       
 }
