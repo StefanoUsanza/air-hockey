@@ -21,8 +21,15 @@ function mouseMessage(data){
     // io.socketClient.emit('mouse',data);
     //console.log(data);
 }
-socketClient.on('disco', (data)=>{
-    socketClient.broadcast.emit('disco', data);
+ socketClient.on('disco', (data)=>{
+    socketClient.broadcast.emit('disco', data); 
+}); 
+socketClient.on('score', (data)=>{
+    socketClient.broadcast.emit('score', data);
+});
+//! sostituire con evento collisioni
+socketClient.on('goal', ()=>{
+    socketClient.broadcast.emit('goal');
 });
 
 }

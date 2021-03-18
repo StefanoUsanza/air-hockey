@@ -50,4 +50,8 @@ class Player{
       Matter.Body.setPosition(this.body, {x: data.x, y: data.y});
     }
   
+
+    reset(X,Y){
+      Matter.Body.setPosition(this.body, {x: X,y: Y});
+    }
 }
