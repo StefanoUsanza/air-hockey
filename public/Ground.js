@@ -11,7 +11,7 @@ class Ground{
     
       let pos = this.ground.position;
       rectMode(CENTER);
-      fill(170);
+      fill(183,119,41);
       rect(pos.x,pos.y,this.w, this.h);
     }
 
