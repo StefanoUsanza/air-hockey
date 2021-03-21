@@ -16,8 +16,16 @@ class disc{
           }
           socketClient.emit('disco', data);
           //! sostituire con evento collisioni
-          if(data.x<150){
+          if(data.x<=50){
+            console.log('goal');
+            punteggio2++;
+            this.reset();
             socketClient.emit('goal');
+          }
+          else if(data.x>=750){
+            console.log('punto');
+            punteggio1++;
+            this.reset();
           }
         }
 
@@ -25,8 +33,9 @@ class disc{
           Matter.Body.setPosition(this.body, {x: data.x, y: data.y});
         }
 
-        reset(X,Y){
-          Matter.Body.setPosition(this.body, {x: X,y: Y});
+        reset(){
+          Matter.Body.setPosition(this.body, {x: 400,y: 200});
+          Matter.Body.setVelocity(this.body,{x: 0,y: 0});
         }
 
       
