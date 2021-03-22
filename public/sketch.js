@@ -1,5 +1,4 @@
 let socketClient;
-let room="h12";
 let p1;
 let p2;
 var disco;
@@ -7,6 +6,7 @@ var groundB,groundL1,groundL2,groundR1,groundR2,groundT;
 var player1,player2;
 var porta1,porta2;
 var punteggio1=0, punteggio2=0;
+var state=0;
 
 //definizioni variabili matter-js
 var Engine = Matter.Engine,
@@ -22,7 +22,24 @@ var mConstraint;
 function setup() {
   var canvas = createCanvas(800, 400);
   socketClient = io.connect('http://localhost:3000');
+  input = createInput();
+  input.position((width/2), 50);
 
+  button = createButton('submit');
+  button.position(input.x + input.width, 50);
+
+  if(state==0){
+    button.mousePressed(joinRoom);
+    function joinRoom(){
+      const room = input.value();
+      socketClient.emit('join', room);
+      input.remove();
+      button.remove();
+      state=1;
+    }
+  }
+
+  
   //evento movimento del mouse
   socketClient.on('mouse', newUpdate);
    function newUpdate(data){
@@ -30,11 +47,7 @@ function setup() {
   } 
 
   //evento movimento disco, aggiorna posizione disco
-  //todo ottimizzare movimenti disco
-  socketClient.on('disco', discoUpdate);
-  function discoUpdate(data){
-    disco.d2(data);
-  }
+
 
   //evento aggiornamento punteggi
   socketClient.on('score',scoreUpdate);
@@ -43,7 +56,7 @@ function setup() {
     punteggio2=data.score2;
   }
 
-  //! sostituire con evento collisioni
+  //! rendila utile
   socketClient.on('goal',goal);
   function goal(){
     console.log("goallll");
@@ -69,12 +82,17 @@ function setup() {
   player2= new Player(700,100,'blue');
   var canvasmouse = Mouse.create(canvas.elt);
   
+  //todo ottimizzare movimenti disco
+  socketClient.on('disco', discoUpdate);
+  function discoUpdate(data){
+    console.log(data.x);
+    disco.d2(data);
+  }
+
+  //mouse constraint
   var option={
     mouse: canvasmouse
   }
-  
- 
-
 
   mConstraint = MouseConstraint.create(engine,option);
   World.add(engine.world,[mConstraint]);
@@ -101,6 +119,8 @@ function setup() {
 
 function draw() {
   background(255);
+
+if(state==1){
 
   //disegna i bordi del campo
   
@@ -130,5 +150,5 @@ function draw() {
   player1.move();
   player1.aggiorna();  
   
-  
+  }
 }
