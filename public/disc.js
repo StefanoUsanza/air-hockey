@@ -15,14 +15,13 @@ class disc{
             y: this.body.position.y
           }
           socketClient.emit('disco', data);
-          //! sostituire con evento collisioni
-          if(data.x<=50){
+          if(data.x<=45 && data.y>150 && data.y<325){
             console.log('goal');
             punteggio2++;
             this.reset();
             socketClient.emit('goal');
           }
-          else if(data.x>=750){
+          else if(data.x>=755 && data.y>150 && data.y<325){
             console.log('punto');
             punteggio1++;
             this.reset();

@@ -98,24 +98,8 @@ function setup() {
   World.add(engine.world,[mConstraint]);
   engine.world.gravity.y = 0;
   Engine.run(engine);
-
-  
 }
 
-//TODO modificare con eventi di collisione
-/* function keyPressed(){
-
-  player1.reset(100,100);
-  disco.reset(width/2, height/2);
-
-  punteggio1++;
-  var data={
-    score1:punteggio1,
-    score2: punteggio2 
-  }
-  socketClient.emit('score', data);
-  
-} */
 
 function draw() {
   background(255);
