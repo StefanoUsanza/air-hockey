@@ -34,9 +34,6 @@ function mouseMessage(data){
 socketClient.on('score', (data)=>{
     socketClient.to(Room).emit('score', data);
 });
-//! sostituire con evento collisioni
-socketClient.on('goal', ()=>{
-    socketClient.to(Room).emit('goal');
-});
+
 
 }

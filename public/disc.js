@@ -18,13 +18,14 @@ class disc{
           if(data.x<=45 && data.y>150 && data.y<325){
             console.log('goal');
             punteggio2++;
-            this.reset();
-            socketClient.emit('goal');
+            this.reset(200,80);
+            //todo add emit for score update
           }
           else if(data.x>=755 && data.y>150 && data.y<325){
             console.log('punto');
             punteggio1++;
-            this.reset();
+            this.reset(600,80);
+            //todo add emit for score update
           }
         }
 
@@ -32,9 +33,10 @@ class disc{
           Matter.Body.setPosition(this.body, {x: data.x, y: data.y});
         }
 
-        reset(){
-          Matter.Body.setPosition(this.body, {x: 400,y: 200});
+        reset(X,Y){
+          Matter.Body.setPosition(this.body, {x: X,y: Y});
           Matter.Body.setVelocity(this.body,{x: 0,y: 0});
+          Matter.Body.applyForce(this.body, {x : X, y: Y}, {x: 0, y: 0.0015});
         }
 
       

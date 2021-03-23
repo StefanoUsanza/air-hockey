@@ -56,11 +56,6 @@ function setup() {
     punteggio2=data.score2;
   }
 
-  //! rendila utile
-  socketClient.on('goal',goal);
-  function goal(){
-    console.log("goallll");
-  }
 
   //creazione disco
   disco = new disc(400,200);
