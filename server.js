@@ -20,23 +20,15 @@ function newConnection(socketClient){
         Room=room;
         socketClient.join(Room);
         console.log('new connection: ' + socketClient.id + ' in room: ' + Room + ' player: ' + n_player)
-        if(n_player==0){
             socketClient.emit('newPlayer',socketClient.id,n_player);
             n_player++;    
-        }
-        else if(n_player==1){
-            console.log('ricevuto')
-            socketClient.emit('newPlayer',socketClient.id,n_player);
-            n_player++;
-        }
-        
     };
 
-socketClient.on('player1', p1);
-function p1(id){        
-    socketClient.emit('player2',id);
+socketClient.on('syncId',syncId);
+function syncId(id){
+    socketClient.to(Room).emit('reciveId',id)
 }
-        
+
 socketClient.on('mouse', mouseMessage);
 function mouseMessage(data,room){
     socketClient.to(room).emit('mouse', data);

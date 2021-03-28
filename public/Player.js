@@ -5,6 +5,10 @@ class Player{
       this.c = color;
       Matter.World.add(engine.world, this.body);
     }
+    setId(id){
+      this.id=id;
+    }
+
     show() {
       let pos = this.body.position;
       fill(this.c);

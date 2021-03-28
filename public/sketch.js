@@ -43,40 +43,56 @@ function setup() {
       
     }
   }
+  player1 = new Player(100,100,'red',0);
+  player2 = new Player(700,100,'blue',0);
+
 
   //collegamento giocatore al socket id
   socketClient.on('newPlayer', newPlayer);
   function newPlayer(id,N_player){
     console.log(id);
     n_player=N_player;
-
-   if(n_player==0){
-      players[n_player]= new Player(100,100,'red',id);
-      n_player++;
-      socketClient.emit('player1', players[n_player-1].id);
+    if(n_player==0){
+      player1.setId(id);
+      console.log('1:' + player1.id);
+      console.log('2:' + player2.id);
     }
     else if(n_player==1){
-      socketClient.on('player2',p2);
-      function p2(id){
-        players[n_player]= new Player(100,100,'red',id);  
-      }
-      players[n_player]= new Player(700,100,'blue',id);
-    } 
+      player2.setId(id);
+      console.log('1:' + player1.id);
+      console.log('2:' + player2.id);
+    }
+  }
+
+  socketClient.on('reciveId',reciveId);
+  function reciveId(id){
+    var ID=0;
+    if(player1.id==0){
+      player1.setId(id);
+      ID=player2.id;
+    }
+      
+    else if(player2.id==0){
+      player2.setId(id);
+      ID=player1.id;
+    }
+      
+
+    console.log(player1.id);
+    console.log(player2.id);
+    if(ID!=0)
+      socketClient.emit('syncId', ID)
 
   }
 
   //evento movimento del mouse
   socketClient.on('mouse', newUpdate);
    function newUpdate(data){
-    for(let i=0; i<1; i++){
-      if(players[i].id==data.id){
-        players[i].p2(data);
-      }
-    }
+      if(player1.id==data.id)
+        player1.p2(data);
+      else if(player2.id==data.id)
+        player2.p2(data.id);
   } 
-
-  //evento movimento disco, aggiorna posizione disco
-
 
   //evento aggiornamento punteggi
   socketClient.on('score',scoreUpdate);
@@ -84,7 +100,6 @@ function setup() {
     punteggio1=data.score1;
     punteggio2=data.score2;
   }
-
 
   //creazione disco
   disco = new disc(400,200);
@@ -126,6 +141,17 @@ function draw() {
 
 if(state==1){
 
+  if(n_player==1){
+    console.log('gnaaaaa');
+    var ID;
+    if(player1.id!=0)
+      ID=player1.id;
+    else if(player2.id!=0)
+      ID=player2.id;
+    socketClient.emit('syncId', ID)
+    n_player++;
+  }
+
   //disegna i bordi del campo
   
   groundL1.show();
@@ -149,15 +175,17 @@ if(state==1){
   disco.aggiorna(room);
 
   //disegna i giocatori
-/*   player1.show();
+  player1.show();
   player2.show();
   player1.move();
-  player1.aggiorna(room); */
+  player1.aggiorna(room);
+  //player2.aggiorna(room);
 
-  for(let i=0; i<1; i++){
+
+/*   for(let i=0; i<1; i++){
     players[i].show();
     players[i].aggiorna(room);
-  }
+  } */
   
   }
 }
