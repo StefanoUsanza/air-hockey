@@ -1,5 +1,6 @@
 class Player{
-    constructor(x, y,color) {
+    constructor(x, y,color,id) {
+      this.id=id;
       this.body= Matter.Bodies.circle(x,y,20)
       this.c = color;
       Matter.World.add(engine.world, this.body);
@@ -38,12 +39,13 @@ class Player{
        } 
     }
 
-    aggiorna(){
+    aggiorna(room){
       let data = {
         x: this.body.position.x,
-        y: this.body.position.y
+        y: this.body.position.y,
+        id: this.id
       }
-      socketClient.emit('mouse', data);
+      socketClient.emit('mouse', data,room);
     }
 
     p2(data){

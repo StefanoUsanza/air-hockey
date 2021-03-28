@@ -9,12 +9,12 @@ class disc{
           ellipse(pos.x,pos.y,20)
         }
 
-        aggiorna(){
+        aggiorna(room){
           let data = {
             x: this.body.position.x,
             y: this.body.position.y
           }
-          socketClient.emit('disco', data);
+          socketClient.emit('disco', data,room);
           if(data.x<=45 && data.y>150 && data.y<325){
             console.log('goal');
             punteggio2++;

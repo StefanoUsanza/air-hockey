@@ -7,6 +7,9 @@ var player1,player2;
 var porta1,porta2;
 var punteggio1=0, punteggio2=0;
 var state=0;
+var room;
+var players= Array();
+var n_player=0;
 
 //definizioni variabili matter-js
 var Engine = Matter.Engine,
@@ -31,19 +34,45 @@ function setup() {
   if(state==0){
     button.mousePressed(joinRoom);
     function joinRoom(){
-      const room = input.value();
+      room = input.value();
       socketClient.emit('join', room);
       input.remove();
       button.remove();
       state=1;
+      //players[0] = new Player(300,100,'red');
+      
     }
   }
 
-  
+  //collegamento giocatore al socket id
+  socketClient.on('newPlayer', newPlayer);
+  function newPlayer(id,N_player){
+    console.log(id);
+    n_player=N_player;
+
+   if(n_player==0){
+      players[n_player]= new Player(100,100,'red',id);
+      n_player++;
+      socketClient.emit('player1', players[n_player-1].id);
+    }
+    else if(n_player==1){
+      socketClient.on('player2',p2);
+      function p2(id){
+        players[n_player]= new Player(100,100,'red',id);  
+      }
+      players[n_player]= new Player(700,100,'blue',id);
+    } 
+
+  }
+
   //evento movimento del mouse
   socketClient.on('mouse', newUpdate);
    function newUpdate(data){
-    player1.p2(data);
+    for(let i=0; i<1; i++){
+      if(players[i].id==data.id){
+        players[i].p2(data);
+      }
+    }
   } 
 
   //evento movimento disco, aggiorna posizione disco
@@ -72,15 +101,11 @@ function setup() {
   porta1= new Porta(0,200,50,100);
   porta2= new Porta(800,200,50,100);
 
-  //creazione players
-  player1= new Player(100,100,'red');
-  player2= new Player(700,100,'blue');
   var canvasmouse = Mouse.create(canvas.elt);
   
   //todo ottimizzare movimenti disco
   socketClient.on('disco', discoUpdate);
   function discoUpdate(data){
-    console.log(data.x);
     disco.d2(data);
   }
 
@@ -121,13 +146,18 @@ if(state==1){
 
   //disegna il disco
   disco.show();
-  disco.aggiorna();
+  disco.aggiorna(room);
 
   //disegna i giocatori
-  player1.show();
+/*   player1.show();
   player2.show();
   player1.move();
-  player1.aggiorna();  
+  player1.aggiorna(room); */
+
+  for(let i=0; i<1; i++){
+    players[i].show();
+    players[i].aggiorna(room);
+  }
   
   }
 }
