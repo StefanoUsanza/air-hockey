@@ -44,7 +44,7 @@ function setup() {
     }
   }
   player1 = new Player(100,100,'red',0);
-  player2 = new Player(700,100,'blue',0);
+  player2 = new Player(600,200,'blue',0);
 
 
   //collegamento giocatore al socket id
@@ -63,7 +63,7 @@ function setup() {
       console.log('2:' + player2.id);
     }
   }
-
+//assegna gli id del client avversario
   socketClient.on('reciveId',reciveId);
   function reciveId(id){
     var ID=0;
@@ -85,13 +85,21 @@ function setup() {
 
   }
 
+  socketClient.on('user has left', disconnect);
+  function disconnect(id){
+    if(player1.id==id)
+      player1.id=0;
+    else if(player2.id==id)
+      player2.id=0;
+  }
+
   //evento movimento del mouse
   socketClient.on('mouse', newUpdate);
    function newUpdate(data){
       if(player1.id==data.id)
         player1.p2(data);
       else if(player2.id==data.id)
-        player2.p2(data.id);
+        player2.p2(data);
   } 
 
   //evento aggiornamento punteggi
@@ -172,20 +180,19 @@ if(state==1){
 
   //disegna il disco
   disco.show();
-  disco.aggiorna(room);
+  //! deve essere aggiornato da entrabe i client
+  if(socketClient.id==player1.id)
+    disco.aggiorna(room);
+/*   if(socketClient.id==player2.id)
+    disco.aggiorna(room); */
 
   //disegna i giocatori
   player1.show();
   player2.show();
   player1.move();
-  player1.aggiorna(room);
-  //player2.aggiorna(room);
-
-
-/*   for(let i=0; i<1; i++){
-    players[i].show();
-    players[i].aggiorna(room);
-  } */
-  
-  }
+  if(socketClient.id==player1.id)
+    player1.aggiorna(room);
+  if(socketClient.id==player2.id)
+    player2.aggiorna(room);
+  } 
 }

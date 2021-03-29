@@ -5,6 +5,8 @@ const app = express();
 const server = app.listen(3000);
 var Room;
 var n_player=0;
+var mapRoom= new Map();
+var user= new Map();
 
 app.use(express.static('public'));
 
@@ -19,10 +21,23 @@ function newConnection(socketClient){
     function join(room){
         Room=room;
         socketClient.join(Room);
-        console.log('new connection: ' + socketClient.id + ' in room: ' + Room + ' player: ' + n_player)
-            socketClient.emit('newPlayer',socketClient.id,n_player);
-            n_player++;    
+        user.set(socketClient.id,Room);
+        if(mapRoom.get(room)==null)
+        mapRoom.set(room,0);        
+        console.log('new connection: ' + socketClient.id + ' in room: ' + Room + ' player: ' + mapRoom.get(room))
+            socketClient.emit('newPlayer',socketClient.id,mapRoom.get(room));
+            mapRoom.set(room,mapRoom.get(room)+1);   
+            
     };
+    //non è possibile usare l'evento disconnect perchè il socket è già uscito dalla stanza
+    socketClient.on('disconnecting', disconnessione)
+    function disconnessione(){
+        //assegna solo il valore della stanza escludendo l'id del socket
+        const room = user.get(socketClient.id);
+        console.log(mapRoom.get(room));
+        mapRoom.set(room,mapRoom.get(room)-1);
+        socketClient.to(room).emit("user has left", socketClient.id);
+    }
 
 socketClient.on('syncId',syncId);
 function syncId(id){
@@ -42,6 +57,4 @@ function mouseMessage(data,room){
 socketClient.on('score', (data)=>{
     socketClient.to(Room).emit('score', data);
 });
-
-
 }
