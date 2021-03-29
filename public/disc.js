@@ -19,13 +19,21 @@ class disc{
             console.log('goal');
             punteggio2++;
             this.reset(200,80);
-            //todo add emit for score update
+            let score = {
+              score1: punteggio1,
+              score2: punteggio2
+            }
+            socketClient.emit('score',score);
           }
           else if(data.x>=755 && data.y>150 && data.y<325){
             console.log('punto');
             punteggio1++;
             this.reset(600,80);
-            //todo add emit for score update
+            let score = {
+              score1: punteggio1,
+              score2: punteggio2
+            }
+            socketClient.emit('score',score);
           }
         }
 
