@@ -1,6 +1,4 @@
 let socketClient;
-let p1;
-let p2;
 var disco;
 var groundB,groundL1,groundL2,groundR1,groundR2,groundT;
 var player1,player2;
@@ -25,6 +23,7 @@ var mConstraint;
 function setup() {
   var canvas = createCanvas(800, 400);
   socketClient = io.connect('http://localhost:3000');
+  alert=null;
   input = createInput();
   input.position((width/2), 50);
 
@@ -38,6 +37,8 @@ function setup() {
       socketClient.emit('join', room);
       input.remove();
       button.remove();
+      if(alert!=null)
+        alert.remove();
       state=1;
       //players[0] = new Player(300,100,'red');
       
@@ -46,6 +47,22 @@ function setup() {
   player1 = new Player(100,100,'red',0);
   player2 = new Player(600,200,'blue',0);
 
+  socketClient.on('stanza piena',stanzaPiena);
+  function stanzaPiena(id,room){
+    console.log('gnaaaaaaaaaaa');
+    input = createInput();
+  input.position((width/2), 50);
+
+  alert = createElement('h2', "la stanza "+ room + " è piena");
+  alert.position((width/2),50+20);
+  textAlign(CENTER);
+  textSize(50);
+
+  button = createButton('submit');
+  button.position(input.x + input.width, 50);
+    state=0;
+    button.mousePressed(joinRoom);
+  }
 
   //collegamento giocatore al socket id
   socketClient.on('newPlayer', newPlayer);
@@ -76,15 +93,14 @@ function setup() {
       player2.setId(id);
       ID=player1.id;
     }
-      
-
     console.log(player1.id);
     console.log(player2.id);
     if(ID!=0)
       socketClient.emit('syncId', ID)
 
   }
-
+  //un client si è disconnesso, se è rimasto un client connesso l'avversario viene resettato per poter essere
+  //sostituido da una nuova connessione
   socketClient.on('user has left', disconnect);
   function disconnect(id){
     if(player1.id==id)
@@ -97,9 +113,9 @@ function setup() {
   socketClient.on('mouse', newUpdate);
    function newUpdate(data){
       if(player1.id==data.id)
-        player1.p2(data);
+        player1.setPosizione(data);
       else if(player2.id==data.id)
-        player2.p2(data);
+        player2.setPosizione(data);
   } 
 
   //evento aggiornamento punteggi
@@ -124,8 +140,6 @@ function setup() {
   porta1= new Porta(0,200,50,100);
   porta2= new Porta(800,200,50,100);
 
-  var canvasmouse = Mouse.create(canvas.elt);
-  
   //todo ottimizzare movimenti disco
   socketClient.on('disco', discoUpdate);
   function discoUpdate(data){
@@ -133,6 +147,8 @@ function setup() {
   }
 
   //mouse constraint
+  var canvasmouse = Mouse.create(canvas.elt);
+
   var option={
     mouse: canvasmouse
   }
@@ -147,10 +163,10 @@ function setup() {
 function draw() {
   background(255);
 
+//stato 1: login effettuato visualizzazione del campo di gioco
 if(state==1){
-
+  //aggiornamento id socket con il client avversario
   if(n_player==1){
-    console.log('gnaaaaa');
     var ID;
     if(player1.id!=0)
       ID=player1.id;
@@ -161,7 +177,6 @@ if(state==1){
   }
 
   //disegna i bordi del campo
-  
   groundL1.show();
   groundR1.show();
   groundL2.show();
@@ -171,8 +186,8 @@ if(state==1){
   
   //disegna i punteggi
   textSize(32);
-      fill(0);
-      text(punteggio1 + " SCORE " + punteggio2, (width / 2)-80, 35)
+  fill(0);
+  text(punteggio1 + " SCORE " + punteggio2, (width / 2)-80, 35)
 
   //disegna le porte
   porta1.show();
@@ -183,13 +198,10 @@ if(state==1){
   //! deve essere aggiornato da entrabe i client
   if(socketClient.id==player1.id)
     disco.aggiorna(room);
-/*   if(socketClient.id==player2.id)
-    disco.aggiorna(room); */
 
   //disegna i giocatori
   player1.show();
   player2.show();
-  player1.move();
   if(socketClient.id==player1.id)
     player1.aggiorna(room);
   if(socketClient.id==player2.id)

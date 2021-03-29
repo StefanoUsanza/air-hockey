@@ -20,19 +20,28 @@ function newConnection(socketClient){
     socketClient.on('join',join)
     function join(room){
         Room=room;
-        socketClient.join(Room);
-        user.set(socketClient.id,Room);
+
+        //se sono già connesse due persone nella stanza selezionata impedisce l'accesso
+        if(mapRoom.get(room)==2){
+            socketClient.emit('stanza piena',socketClient.id,room)
+        }
+        else{
+        //se non è presente la stanza nella mappa viene aggiunta con 0 persone connesse
+        //ad ogni connessione viene incrementato il numero di persone connesse
         if(mapRoom.get(room)==null)
-        mapRoom.set(room,0);        
+            mapRoom.set(room,0);
+        //associazione socket id stanza connessa
+        user.set(socketClient.id,Room);
+        socketClient.join(Room);
         console.log('new connection: ' + socketClient.id + ' in room: ' + Room + ' player: ' + mapRoom.get(room))
-            socketClient.emit('newPlayer',socketClient.id,mapRoom.get(room));
-            mapRoom.set(room,mapRoom.get(room)+1);   
-            
+        socketClient.emit('newPlayer',socketClient.id,mapRoom.get(room));
+        mapRoom.set(room,mapRoom.get(room)+1);  
+        }    
     };
     //non è possibile usare l'evento disconnect perchè il socket è già uscito dalla stanza
     socketClient.on('disconnecting', disconnessione)
     function disconnessione(){
-        //assegna solo il valore della stanza escludendo l'id del socket
+        //recupero la stanza tramite l'id del socket
         const room = user.get(socketClient.id);
         console.log(mapRoom.get(room));
         mapRoom.set(room,mapRoom.get(room)-1);
