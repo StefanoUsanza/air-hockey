@@ -9,27 +9,36 @@ class disc{
           ellipse(pos.x,pos.y,20)
         }
 
-        aggiorna(){
+        aggiorna(room){
           let data = {
             x: this.body.position.x,
             y: this.body.position.y
           }
-          socketClient.emit('disco', data);
+          socketClient.emit('disco', data,room);
           if(data.x<=45 && data.y>150 && data.y<325){
             console.log('goal');
             punteggio2++;
             this.reset(200,80);
-            //todo add emit for score update
+            let score = {
+              score1: punteggio1,
+              score2: punteggio2
+            }
+            socketClient.emit('score',score);
           }
           else if(data.x>=755 && data.y>150 && data.y<325){
             console.log('punto');
             punteggio1++;
             this.reset(600,80);
-            //todo add emit for score update
+            let score = {
+              score1: punteggio1,
+              score2: punteggio2
+            }
+            socketClient.emit('score',score);
           }
         }
 
         d2(data){
+          console.log('serio');
           Matter.Body.setPosition(this.body, {x: data.x, y: data.y});
         }
 
