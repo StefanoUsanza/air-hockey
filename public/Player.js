@@ -49,7 +49,7 @@ class Player{
       let data = {
         x: this.body.position.x,
         y: this.body.position.y,
-        id: this.id
+        id: this.id,
       }
       socketClient.emit('mouse', data,room);
     }

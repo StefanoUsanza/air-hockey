@@ -41,7 +41,6 @@ function setup() {
         alert.remove();
       state=1;
       //players[0] = new Player(300,100,'red');
-      
     }
   }
   player1 = new Player(100,100,'red',0);
@@ -186,6 +185,7 @@ if(state==1){
   
   //disegna i punteggi
   textSize(32);
+  textFont('arial');
   fill(0);
   text(punteggio1 + " SCORE " + punteggio2, (width / 2)-80, 35)
 
@@ -196,7 +196,7 @@ if(state==1){
   //disegna il disco
   disco.show();
   //! deve essere aggiornato da entrabe i client
-  if(socketClient.id==player1.id)
+  //if(socketClient.id==player1.id)
     disco.aggiorna(room);
 
   //disegna i giocatori
@@ -207,4 +207,11 @@ if(state==1){
   if(socketClient.id==player2.id)
     player2.aggiorna(room);
   } 
+  else{
+    background(0,200,200);
+    textSize(24);
+    textFont('AwmU Demo');      
+    text('Air Hockey',(width/2),100 );
+    text('Online',(width/2)+44,126 );
+  }
 }

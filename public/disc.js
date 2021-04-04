@@ -38,6 +38,7 @@ class disc{
         }
 
         d2(data){
+          console.log('serio');
           Matter.Body.setPosition(this.body, {x: data.x, y: data.y});
         }
 
