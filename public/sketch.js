@@ -189,6 +189,10 @@ if(state==1){
   fill(0);
   text(punteggio1 + " SCORE " + punteggio2, (width / 2)-80, 35)
 
+  //raggiunto punteggio massimo fine partita
+  if(punteggio1==10 || punteggio2==10)
+    state=2;
+
   //disegna le porte
   porta1.show();
   porta2.show();
@@ -196,7 +200,7 @@ if(state==1){
   //disegna il disco
   disco.show();
   //! deve essere aggiornato da entrabe i client
-  //if(socketClient.id==player1.id)
+  if(socketClient.id==player1.id)
     disco.aggiorna(room);
 
   //disegna i giocatori
@@ -207,11 +211,25 @@ if(state==1){
   if(socketClient.id==player2.id)
     player2.aggiorna(room);
   } 
-  else{
+  //state 0 schermata di log in
+  //visualizza logo e form log in
+  else if(state == 0){
     background(0,200,200);
     textSize(24);
     textFont('AwmU Demo');      
     text('Air Hockey',(width/2),100 );
     text('Online',(width/2)+44,126 );
+  }
+  else if(state ==2){
+    background(0,200,200);
+    textSize(50);
+    fill(0);
+    textFont('AwmU Demo');
+    if(punteggio1==10 && socketClient.id==player1.id)
+      text('Hai vinto',(width/2),100 );
+    else if(punteggio2==10 && socketClient.id==player2.id)
+      text('Hai vinto',(width/2),100 );
+    else
+    text('Hai perso',(width/2),100 );  
   }
 }
