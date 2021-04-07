@@ -11,7 +11,6 @@ var user= new Map();
 app.use(express.static('public'));
 
 const io = socket(server);
-//todo implementa selezione stanza
 console.log('server running');
 
 io.sockets.on('connection', newConnection);

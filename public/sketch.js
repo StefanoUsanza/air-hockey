@@ -139,7 +139,6 @@ function setup() {
   porta1= new Porta(0,200,50,100);
   porta2= new Porta(800,200,50,100);
 
-  //todo ottimizzare movimenti disco
   socketClient.on('disco', discoUpdate);
   function discoUpdate(data){
     disco.d2(data);
@@ -199,7 +198,6 @@ if(state==1){
 
   //disegna il disco
   disco.show();
-  //! deve essere aggiornato da entrabe i client
   if(socketClient.id==player1.id)
     disco.aggiorna(room);
 

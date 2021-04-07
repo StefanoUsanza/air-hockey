@@ -50,12 +50,15 @@ class Player{
         x: this.body.position.x,
         y: this.body.position.y,
         id: this.id,
+        velx: this.body.velocity.x,
+        vely: this.body.velocity.y
       }
       socketClient.emit('mouse', data,room);
     }
     //imposta la posizione in base alle informazioni ricevute dal server
     setPosizione(data){
       Matter.Body.setPosition(this.body, {x: data.x, y: data.y});
+      Matter.Body.setVelocity(this.body, {x: data.velx, y: data.vely});
     }
     //riporta l'oggetto nelle coordinate impostate
     //todo impopstare un reset di emergenza in caso gli oggetti si trovino al di fuori del campo di gioco
