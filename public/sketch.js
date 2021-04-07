@@ -8,6 +8,7 @@ var state=0;
 var room;
 var players= Array();
 var n_player=0;
+var bg;
 
 //definizioni variabili matter-js
 var Engine = Matter.Engine,
@@ -29,6 +30,7 @@ function setup() {
 
   button = createButton('submit');
   button.position(input.x + input.width, 50);
+  bg = loadImage('images/bg.png');
 
   if(state==0){
     button.mousePressed(joinRoom);
@@ -128,12 +130,12 @@ function setup() {
   disco = new disc(400,200);
 
   //creazione bordi del campo
-  groundB= new Ground(400, 400, 800, 100);
-  groundL1= new Ground(0, 75, 100, 150);
-  groundR1= new Ground(800, 75, 100, 150);
-  groundL2= new Ground(0, 325, 100, 150);
-  groundR2= new Ground(800, 325, 100, 150);
-  groundT= new Ground(400, 0, 800, 100);
+  groundB= new Ground(400, 400, 800, 80);
+  groundL1= new Ground(0, 75, 80, 150);
+  groundR1= new Ground(800, 75, 80, 150);
+  groundL2= new Ground(0, 325, 80, 150);
+  groundR2= new Ground(800, 325, 80, 150);
+  groundT= new Ground(400, 0, 800, 80);
 
   //creazione porte
   porta1= new Porta(0,200,50,100);
@@ -159,7 +161,15 @@ function setup() {
 
 
 function draw() {
-  background(255);
+  //disegna i bordi del campo
+  groundL1.show();
+  groundR1.show();
+  groundL2.show();
+  groundR2.show();
+  groundT.show();
+  groundB.show(); 
+
+  background(bg);
 
 //stato 1: login effettuato visualizzazione del campo di gioco
 if(state==1){
@@ -173,15 +183,7 @@ if(state==1){
     socketClient.emit('syncId', ID)
     n_player++;
   }
-
-  //disegna i bordi del campo
-  groundL1.show();
-  groundR1.show();
-  groundL2.show();
-  groundR2.show();
-  groundT.show();
-  groundB.show();  
-  
+   
   //disegna i punteggi
   textSize(32);
   textFont('arial');
@@ -214,7 +216,8 @@ if(state==1){
   else if(state == 0){
     background(0,200,200);
     textSize(24);
-    textFont('AwmU Demo');      
+    textFont('AwmU Demo');
+    fill(0);      
     text('Air Hockey',(width/2),100 );
     text('Online',(width/2)+44,126 );
   }
