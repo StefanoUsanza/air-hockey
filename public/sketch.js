@@ -26,7 +26,7 @@ function setup() {
   socketClient = io.connect('http://localhost:3000');
   alert=null;
   input = createInput();
-  input.position((width/2), 50);
+  input.position((width/2)-100, 50);
 
   button = createButton('submit');
   button.position(input.x + input.width, 50);
@@ -52,11 +52,11 @@ function setup() {
   function stanzaPiena(id,room){
     console.log('gnaaaaaaaaaaa');
     input = createInput();
-  input.position((width/2), 50);
+  input.position((width/2)-100, 50);
 
   alert = createElement('h2', "la stanza "+ room + " è piena");
-  alert.position((width/2),50+20);
-  textAlign(CENTER);
+  alert.position((width/2)-100,150);
+  //textAlign(CENTER);
   textSize(50);
 
   button = createButton('submit');
@@ -169,6 +169,10 @@ function draw() {
   groundT.show();
   groundB.show(); 
 
+  //disegna le porte
+  porta1.show();
+  porta2.show();
+
   background(bg);
 
 //stato 1: login effettuato visualizzazione del campo di gioco
@@ -188,15 +192,11 @@ if(state==1){
   textSize(32);
   textFont('arial');
   fill(0);
-  text(punteggio1 + " SCORE " + punteggio2, (width / 2)-80, 35)
+  text(punteggio1 + " SCORE " + punteggio2, (width / 2)-83, 35)
 
   //raggiunto punteggio massimo fine partita
   if(punteggio1==10 || punteggio2==10)
     state=2;
-
-  //disegna le porte
-  porta1.show();
-  porta2.show();
 
   //disegna il disco
   disco.show();
@@ -218,8 +218,8 @@ if(state==1){
     textSize(24);
     textFont('AwmU Demo');
     fill(0);      
-    text('Air Hockey',(width/2),100 );
-    text('Online',(width/2)+44,126 );
+    text('Air Hockey',(width/2)-80,100 );
+    text('Online',(width/2)-80+44,126 );
   }
   else if(state ==2){
     background(0,200,200);
@@ -227,10 +227,10 @@ if(state==1){
     fill(0);
     textFont('AwmU Demo');
     if(punteggio1==10 && socketClient.id==player1.id)
-      text('Hai vinto',(width/2),100 );
+      text('Hai vinto',(width/2)-100,100 );
     else if(punteggio2==10 && socketClient.id==player2.id)
-      text('Hai vinto',(width/2),100 );
+      text('Hai vinto',(width/2)-100,100 );
     else
-    text('Hai perso',(width/2),100 );  
+    text('Hai perso',(width/2)-100,100 );  
   }
 }
