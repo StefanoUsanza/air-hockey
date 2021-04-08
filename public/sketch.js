@@ -192,7 +192,20 @@ if(state==1){
   textSize(32);
   textFont('arial');
   fill(0);
-  text(punteggio1 + " SCORE " + punteggio2, (width / 2)-83, 35)
+  text(punteggio1 + " SCORE " + punteggio2, (width / 2)-83, 35);
+
+  //disegno player selector
+  textSize(32);
+  textFont('AwmU Demo');
+  if(socketClient.id==player1.id){
+    fill('red');
+    text("Player One", (width / 2)-80, 390);
+  }
+  else if(socketClient.id==player2.id){
+    fill('blue');
+    text("Player Two", (width / 2)-80, 390);
+  }
+    
 
   //raggiunto punteggio massimo fine partita
   if(punteggio1==10 || punteggio2==10)
